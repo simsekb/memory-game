@@ -62,8 +62,8 @@
             }
             #currentLevel {
                 position: absolute;
-                top: 0px;
-                right: 20px;
+                top: 60px;
+                right: 80px;
                 font-size: 45px;
             }
             .backicon {
@@ -80,8 +80,8 @@
                 font-family:Helvetica ;
                 color: #0456d1;
                 font-weight: 600;
-                right: 10;
-                top: -5px;
+                right: 10px;
+                top: 15px;
             }
             #backImg{
                 position: absolute;
@@ -104,7 +104,10 @@
             .canvas {
                 display: flex;
                 align-items: center;
-                height: 88%;
+                height: 76%;
+            }
+            .footer {
+                height: 12%;
             }
         </style>
     </head>
@@ -116,7 +119,7 @@
             <div class="canvas">
                 <div>
                     <p>tegelspel</p>
-                    <p>Hehaal het patroon</p>
+                    <p>Herhaal het patroon</p>
                     <div class="playGrid">
                         <div id="tile0" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
                         <div id="tile1" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
@@ -136,9 +139,11 @@
                         <div id="tile15" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
                     </div>
                     <p id="clickedTiles">0/4 tegels aangeklikt</p>
+                    <div class="footer">
+                        <div id="statusIcon" class="hide"></div>
+                    </div>
                 </div>
             </div>
-            <div id="statusIcon" class="hide"></div>
         </div>
     </body>
 
@@ -205,8 +210,6 @@
                 }
                 hideCheckMarker(false);
                 if(amountFound >= 4) { //win
-                    level++;
-                    document.getElementById("currentLevel").innerText = level + "/" + levels;
                     document.getElementById("statusIcon").style.backgroundImage = "url('img/check.svg')";
                     window.setTimeout(function() {
                         hideOpenedTiles();
@@ -222,6 +225,8 @@
                         restartGame();
                     }, 2000);
                 }
+                level++;
+                document.getElementById("currentLevel").innerText = level + "/" + levels;
                 //console.log(chosenTiles);
             }
 
