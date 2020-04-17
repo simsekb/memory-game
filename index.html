@@ -1,0 +1,252 @@
+<html>
+    <head>
+        <title>Game</title>
+
+        <style>
+            .game {
+                /* position: relative; */
+                background-color: white;
+                width: 1080px;
+                height: 1920px;
+                font-family: Helvetica;
+            }
+            .game p {
+                text-align: center;
+                font-size: 45px;
+                color: #293975;
+            }
+            .playGrid {
+                display: flex;
+                width: 100%;
+                height: auto;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin: auto;
+            }
+            .block {
+                background-color: transparent;
+                width: 210px;
+                height: 210px;
+                margin: 10px;
+            }
+            .frontBlock, .backBlock {
+                position: absolute;
+                border-radius: 20px;
+                width: 100%;
+                height: 100%;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+            }
+            .block .frontBlock {
+                position: absolute;
+                background-color: #293975;
+                width: 100%;
+                height: 100%;
+            }
+            .block .backBlock {
+                position: absolute;
+                background-color: #D44067; /* #D44067 */
+                width: 100%;
+                height: 100%;
+                transform: rotateY(180deg);
+            }
+            .blockInner {
+                position: relative;
+                transition: transform 0.6s;
+                transform-style: preserve-3d;
+                width: 100%;
+                height: 100%;
+            }
+            .selectedTile {
+                transform: rotateY(180deg);
+            }
+            #currentLevel {
+                position: absolute;
+                top: 0px;
+                right: 20px;
+                font-size: 45px;
+            }
+            .backicon {
+                width: 300px;
+                height: 250px;
+                /* position: absolute; */
+                top: 0px;
+                left: 0px;
+            }
+            .terug {
+                position: absolute;
+                text-align: center;
+                font-size: 45px;
+                font-family:Helvetica ;
+                color: #0456d1;
+                font-weight: 600;
+                right: 10;
+                top: -5px;
+            }
+            #backImg{
+                position: absolute;
+                width: 280px;
+                height: 220px;
+            }
+            #statusIcon {
+                width: 100px;
+                height: 100px;
+                background-image: url('img/check.svg');
+                background-repeat: no-repeat;
+                margin: auto;
+            }
+            .backIconInner {
+                position: relative;
+            }
+            .hide {
+                display: none;
+            }
+            .canvas {
+                display: flex;
+                align-items: center;
+                height: 88%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="game">
+            <div class="backIcon"><div class="backIconInner"><img id='backImg' src="img/back_button.png"/><div class='terug'>TERUG</div></div></div>
+            <div id="currentLevel">0/0</div>
+            <div class="canvas">
+                <div>
+                    <p>tegelspel</p>
+                    <p>Hehaal het patroon</p>
+                    <div class="playGrid">
+                        <div id="tile0" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile1" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile2" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile3" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile4" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile5" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile6" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile7" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile8" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile9" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile10" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile11" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile12" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile13" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile14" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                        <div id="tile15" onclick="clickTile(id)" class="block"><div class="blockInner"><div class="backBlock"></div><div class="frontBlock"></div></div></div>
+                    </div>
+                    <p id="clickedTiles">0/4 tegels aangeklikt</p>
+                </div>
+            </div>
+            <div id="statusIcon" class="hide"></div>
+        </div>
+    </body>
+
+    <footer>
+        <script>
+            let levels = 8;
+            let level = 0;
+            let tilesToChoose = [];
+            let chosenTiles = [];
+            let ableToClick = false;
+
+            restartGame();
+
+            //console.log(tilesToChoose);
+
+            function restartGame() {                
+                tilesToChoose = [];
+                fillTilesToChoose();
+                chosenTiles = [];
+                ableToClick = false;
+                hideCheckMarker(true);
+                document.getElementById("currentLevel").innerText = level + "/" + levels;
+                document.getElementById("clickedTiles").innerText= chosenTiles.length + "/4 tegels aangeklikt";
+
+                window.setTimeout(function() {
+
+                    for (let i = 0; i < tilesToChoose.length; i++) {
+                        document.getElementById(tilesToChoose[i]).firstElementChild.classList.add("selectedTile");
+                    }
+
+                    window.setTimeout(function() {
+                        hideOpenedTiles();
+                        ableToClick = true;
+                    }, 2000);
+                }, 1000);
+            }
+
+            function hideOpenedTiles() {
+                var elements = document.querySelectorAll(".selectedTile");
+
+                [].forEach.call(elements, function(element) {
+                    element.classList.remove("selectedTile");
+                });
+            }
+
+            function clickTile(id) {
+                if(chosenTiles.length < 4 && !chosenTiles.includes(id) && ableToClick) {
+                    // console.log(chosenTiles.length);
+                    chosenTiles.push(id);
+                    document.getElementById(id).firstElementChild.classList.add("selectedTile");
+                    if(chosenTiles.length > 3) {
+                        EndOfTurns();
+                    }
+                }
+                document.getElementById("clickedTiles").innerText= chosenTiles.length + "/4 tegels aangeklikt";
+            }
+
+            function EndOfTurns() {
+                let amountFound = 0;
+                for (let i = 0; i < chosenTiles.length; i++) {
+                    if(tilesToChoose.includes(chosenTiles[i])) {
+                        amountFound++;
+                    }
+                }
+                hideCheckMarker(false);
+                if(amountFound >= 4) { //win
+                    level++;
+                    document.getElementById("currentLevel").innerText = level + "/" + levels;
+                    document.getElementById("statusIcon").style.backgroundImage = "url('img/check.svg')";
+                    window.setTimeout(function() {
+                        hideOpenedTiles();
+
+                        restartGame();
+                    }, 2000);
+                }
+                else { //lose
+                    document.getElementById("statusIcon").style.backgroundImage = "url('img/times.svg')";
+                    window.setTimeout(function() {
+                        hideOpenedTiles();
+
+                        restartGame();
+                    }, 2000);
+                }
+                //console.log(chosenTiles);
+            }
+
+            function hideCheckMarker(status) {
+                if(status) {
+                    document.getElementById("statusIcon").classList.add("hide");
+                }
+                else {
+                    document.getElementById("statusIcon").classList.remove("hide");
+                }
+            }
+
+            function fillTilesToChoose() {
+                while(tilesToChoose.length < 4) {
+                    let randomValue = getRandomValue();
+                    while(!tilesToChoose.includes("tile" + randomValue)) {
+                        tilesToChoose.push("tile" + randomValue);
+                    }
+                }
+            }
+
+            function getRandomValue() {
+                return Math.floor(Math.random() * 16);
+            }
+
+        </script>
+    </footer>
+</html>
